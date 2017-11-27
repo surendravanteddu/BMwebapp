@@ -34,7 +34,8 @@
                     var status = response.status;
                     var statusText = response.statusText;
                     if(status == 201){
-                        localStorage.setItem('token',rdata.token); 
+                        localStorage.setItem('token',rdata.token);
+                        localStorage.setItem('username',$scope.login.email.split("@")[0]); 
                         $state.go('home');
                     }
                 },function(error){
