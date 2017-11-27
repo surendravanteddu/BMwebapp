@@ -9,7 +9,7 @@ Steps to setup.
 You can also other text editors like sublime.
 5. Goto index.html page. 
 6. Click on the live preview button on the right top corner to run the app.
-7. You need to run the server first on your local before running this app.
+7. You need to run the server first on your local before running this app. Make sure the portnumber for the apiUrl on #3 in app.js is same as the port number your server is running on. If not change the port number as per your server.
 8. Or you can uncomment line #2 and comment #3 in app.js. (here we are pointing to the server deployed on heroku)
 video: https://www.screencast.com/t/FVaGPPWkJLTb
 
