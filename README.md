@@ -11,7 +11,7 @@ You can also other text editors like sublime.
 6. Or you can uncomment line #2 and comment #3 in app.js. (here we are pointing to the server deployed on heroku)
 video: https://www.screencast.com/t/FVaGPPWkJLTb
 
-If you have xampp installed on your computer then you can simply clone this app to your htdocs folder, run this apache server 
+If you have xampp installed on your computer then you can simply clone this app to your htdocs folder, run the apache server 
 and open http://localhost/BMwebapp in your browser.
 
 This app is also deployed on heroku. App url: https://bmwebapp.herokuapp.com/index.html#!/login
