@@ -1,0 +1,77 @@
+        <div class="container">
+            <div class="row"><h1>Book Management</h1></div>
+            <div style="margin-top: 60px;">
+                <div class="">
+                    <div class="col-sm-6">
+                        <div style="text-align: center"><h2>Login</h2></div>
+                              <div class="row">
+                                <br/>
+                                <div class="container-fluid">
+                                    <form class="form-horizontal" ng-submit="signIn()" method="post">
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" name="email" class="form-control" id="email" placeholder="email id " ng-model="login.email" required="true">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Password</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" name="password" class="form-control" id="password" ng-model="login.password" placeholder="Password " required="true">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <input type="submit" value="LogIn" class="btn btn-primary"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <p ng-if="loginFailed" class="alert alert-danger" style="text-align: center">{{loginError}}</p>
+                                </div>
+                            </div>  
+                    </div>
+                    <div class="col-sm-6">
+                        <div style="text-align: center"><h2>Sign Up </h2></div>
+                              <div class="row">
+                                <br/>
+                                <div class="container-fluid">
+                                    <form class="form-horizontal" ng-submit="signUp()" method="post">
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" name="email" class="form-control" id="email" placeholder="email id " ng-model="signup.email" required="true">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Password</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" name="password" class="form-control" id="password" placeholder="Password " ng-model="signup.password" required="true">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Re-enter Password</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" name="repassword" class="form-control" id="password" placeholder="Password " ng-model="signup.repassword" required="true">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <input type="submit" value="Sign Up" class="btn btn-primary"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <p ng-if="signupFailed" class="alert alert-danger" style="text-align: center">{{signupError}}</p>
+                                </div>
+                            </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
