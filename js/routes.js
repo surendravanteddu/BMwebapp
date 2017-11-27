@@ -8,21 +8,10 @@
             url: '/login',
             templateUrl: 'views/login.html',
             controller : 'loginController'
-        }).state('main', {
-            abstract : true,
-            templateUrl: 'views/main.html'
-        }).state('main.home',{
+        }).state('home',{
             url: '/',
-            views: {
-                'headerBar' : {
-                    templateUrl : 'views/header.html',
-                    controller : 'headerController'
-                },
-                'mainBody' : {
-                    templateUrl : 'views/home.html',
-                    controller : 'homeController'
-                }
-            }
+            templateUrl: 'views/home.html',
+            controller : 'homeController'
         });
         
         $urlRouterProvider.otherwise('/');

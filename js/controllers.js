@@ -1,56 +1,56 @@
 (function () {
     'use strict';
     loggerApp.controller("loginController", ['$scope','AppConfig','$http','$state','$location',function($scope,AppConfig,$http,$state,$location){
-        $scope.data = {};
+        $scope.signup = {};
+        $scope.login = {};
         $scope.loginFailed = false;
-        $scope.signIn = function(){
-            $http.post(AppConfig.forms.userLogin, {data: $scope.data}, {headers: {'Content-Type': 'application/json'} })
+        $scope.signupFailed = false;
+
+        $scope.signIn= function(){
+            $http.post(AppConfig.forms.userLogin, $scope.login, {headers: {'Content-Type': 'application/json'} })
                 .then(function (response) {
                 var rdata = response.data;
+                console.log(rdata.message);
                 var token = response.headers()['x-jwt-token'];
                 var status = response.status;
                 var statusText = response.statusText;
-                if(status == 200 ){
-                    localStorage.setItem('formioToken',token);
-                    localStorage.setItem('appUser',JSON.stringify(rdata));   
-                    $state.go('main.home');
+                if(status == 200){
+                    localStorage.setItem('token',rdata.token); 
+                    localStorage.setItem('username',$scope.login.email.split("@")[0]); 
+                    $state.go('home');
                 }
             },function(error){
-                //console.log(error.data +", "+error.status+", "+error.statusText);
                 $scope.loginFailed = true;
-                $scope.errorMessage = error.data;
+                $scope.loginError = error.data.message;
             });
         };
+
+        $scope.signUp = function(){
+            if($scope.signup.password == $scope.signup.repassword){
+                $http.post(AppConfig.forms.userRegister, $scope.signup, {headers: {'Content-Type': 'application/json'} })
+                    .then(function (response) {
+                    var rdata = response.data;
+                    var token = response.headers()['x-jwt-token'];
+                    var status = response.status;
+                    var statusText = response.statusText;
+                    if(status == 201){
+                        localStorage.setItem('token',rdata.token); 
+                        $state.go('home');
+                    }
+                },function(error){
+                    $scope.signupFailed = true;
+                    $scope.signupError = error.data.message;
+                });
+            }else{
+                $scope.signupFailed = true;
+                $scope.signupError = "Passwords doesnot match";
+            }
+        };
+
     }])
 
-
-        .controller('homeController',['$scope','AppConfig','$http','$state',function($scope,AppConfig,$http,$state,searchSuggestions){
-            
-        }])
-
-
-        .controller('headerController',['$scope','AppConfig','$http','$state','userInfo','$timeout','$q','searchResults',function($scope,AppConfig,$http,$state,userInfo,$timeout,$q,searchResults,searchSuggestions){
-            $scope.username = userInfo.username;
-            var timeout;
-            $scope.suggesstions = function(searchText){
-                var deferred = $q.defer();
-                if(timeout){
-                    $timeout.cancel(timeout);
-                }
-                timeout = $timeout(function() {
-                    searchResults.getResults(searchText,function(result){
-                        deferred.resolve(result);
-                    });  
-                }, 1000);
-                return deferred.promise;
-            };
-
-            $scope.searchShows = function(){
-                searchResults.getResults($scope.keyword,function(result){
-                    
-                });   
-            };
-
+        .controller('homeController',['$scope','AppConfig','$http','$state',function($scope,AppConfig,$http,$state,searchSuggestions,seriesInfo){
+            $scope.username = localStorage.getItem("username");
             $scope.logout = function(){
                 localStorage.clear();
                 $state.go('login');    
