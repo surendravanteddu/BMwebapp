@@ -74,50 +74,52 @@
 </div>  
 <script>
     $(document).ready(function() {
-        $('#example').DataTable( {
-            "dom":'l<"search"f><"top"r>t<"bottom"ip><"clear">',
-            "scrollY": "75%",
-            "scrollX": "true",
-            "scrollCollapse": true,
-            "ajax": {
-                "url" : apiUrl+"books",
-                "type" : "GET",
-                "headers" : {"x-jwt-token": localStorage.getItem('token')},
-                "cache": true
-            },
-            "aoColumnDefs": [
-                {
-                    "mRender": function (data, type, row ) {
-                        return row.bookName;
-                    },
-                    "targets": [0]
+        if(localStorage.getItem('token') && localStorage.getItem('token')!='undefined'){
+            $('#example').DataTable( {
+                "dom":'l<"search"f><"top"r>t<"bottom"ip><"clear">',
+                "scrollY": "75%",
+                "scrollX": "true",
+                "scrollCollapse": true,
+                "ajax": {
+                    "url" : apiUrl+"books",
+                    "type" : "GET",
+                    "headers" : {"x-jwt-token": localStorage.getItem('token')},
+                    "cache": true
                 },
-                {"data" : "author", "targets" : [1]},
-                {"data" : "publicationDate", "targets" : [2]},
-                {"data" : "shortDesc", "targets" : [3]},
-                {
-                    "mRender": function(data,type,row){
-                        var temp = "<p style='white-space: nowrap;'>";
-                        for(var i=0; i<row.rating;i++){
-                            temp += "<span class='fa fa-star' style='color: red'></span>";
-                        }
-                        for(var i=0; i<(5-row.rating);i++){
-                            temp += "<span class='fa fa-star'></span>";   
-                        }
-                        temp += "</p>"
-                        return temp;   
+                "aoColumnDefs": [
+                    {
+                        "mRender": function (data, type, row ) {
+                            return row.bookName;
+                        },
+                        "targets": [0]
                     },
-                    "aTargets": [4]
-                },
-                {
-                    "mRender": function(data,type,row){
-                        var bookName = row.bookName.replace("'", "\\'");
-                        return "<p style='width: 100px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>"+row.notes+"</p><a><span data-toggle='modal' data-target='#deleteModal' class='glyphicon glyphicon-pencil modalUse' style='margin-left: 10px;' onclick=\"makeNote("+row.bookId+",'"+bookName+"','"+row.notes+"')\"></span></a>"
+                    {"data" : "author", "targets" : [1]},
+                    {"data" : "publicationDate", "targets" : [2]},
+                    {"data" : "shortDesc", "targets" : [3]},
+                    {
+                        "mRender": function(data,type,row){
+                            var temp = "<p style='white-space: nowrap;'>";
+                            for(var i=0; i<row.rating;i++){
+                                temp += "<span class='fa fa-star' style='color: red'></span>";
+                            }
+                            for(var i=0; i<(5-row.rating);i++){
+                                temp += "<span class='fa fa-star'></span>";   
+                            }
+                            temp += "</p>"
+                            return temp;   
+                        },
+                        "aTargets": [4]
                     },
-                    "aTargets": [5]
-                }
-            ]
-        } ) ;
+                    {
+                        "mRender": function(data,type,row){
+                            var bookName = row.bookName.replace("'", "\\'");
+                            return "<p style='width: 100px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>"+row.notes+"</p><a><span data-toggle='modal' data-target='#deleteModal' class='glyphicon glyphicon-pencil modalUse' style='margin-left: 10px;' onclick=\"makeNote("+row.bookId+",'"+bookName+"','"+row.notes+"')\"></span></a>"
+                        },
+                        "aTargets": [5]
+                    }
+                ]
+            } ) ;   
+        }
 
         $("p").removeClass("sorting");
 
