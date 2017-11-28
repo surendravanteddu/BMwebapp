@@ -129,9 +129,10 @@
         var temp = curele.parent().parent().find('p').eq(0).html();
         ele = curele;
         book.bookId = id;
-        book.bookName = bookName;
         book.notes = temp;
+        temp = (temp === 'Add Note') ? '' : temp;
         $('#note').val(temp);
+        $('#bookName').html(bookName);
     }
 
     function saveNote(){
