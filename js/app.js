@@ -1,6 +1,5 @@
 var loggerApp;
-//var apiUrl = 'https://bmwebservices.herokuapp.com/webapi/';
-var apiUrl = 'http://localhost:8080/booksManagement/webapi/';
+var apiUrl = (window.location.href.includes('https')) ? 'https://bmwebservices.herokuapp.com/webapi/' : 'http://localhost:8080/booksManagement/webapi/';
 (function () {
     'use strict';
     loggerApp =  angular
