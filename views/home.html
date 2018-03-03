@@ -55,9 +55,7 @@
 
 <div class="modal fade" id="deleteModal" role="dialog">
     <div class="modal-dialog">
-
         <div class="modal-content">
-            <input type="hidden" id="bookId"/>
             <div class="modal-header" style="padding:25px 50px;">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4><span class="glyphicon glyphicon-list-alt"></span> Add Note for <span id="bookName"></span></h4>
@@ -73,6 +71,8 @@
     </div>
 </div>  
 <script>
+    var ele;
+    var book = {};
     $(document).ready(function() {
         if(localStorage.getItem('token') && localStorage.getItem('token')!='undefined'){
             $('#example').DataTable( {
@@ -113,7 +113,7 @@
                     {
                         "mRender": function(data,type,row){
                             var bookName = row.bookName.replace("'", "\\'");
-                            return "<p style='width: 100px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>"+row.notes+"</p><a><span data-toggle='modal' data-target='#deleteModal' class='glyphicon glyphicon-pencil modalUse' style='margin-left: 10px;' onclick=\"makeNote("+row.bookId+",'"+bookName+"','"+row.notes+"')\"></span></a>"
+                            return "<p style='width: 100px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>"+row.notes+"</p><a><span data-toggle='modal' data-target='#deleteModal' class='glyphicon glyphicon-pencil modalUse' style='margin-left: 10px;' onclick=\"makeNote("+row.bookId+",'"+bookName+"',$(this))\"></span></a>"
                         },
                         "aTargets": [5]
                     }
@@ -125,34 +125,37 @@
 
     });
 
-    function makeNote(id, bookName, notes){
-        $("#bookId").val(id);
-        $("#bookName").html(bookName);
-        $("#note").val(notes);
+    function makeNote(id, bookName,curele){
+        var temp = curele.parent().parent().find('p').eq(0).html();
+        ele = curele;
+        book.bookId = id;
+        book.notes = temp;
+        temp = (temp === 'Add Note') ? '' : temp;
+        $('#note').val(temp);
+        $('#bookName').html(bookName);
     }
 
     function saveNote(){
-        $.ajax({
-            method: "POST",
-            contentType: "application/json",
-            url: apiUrl + "savenote",
-            data: JSON.stringify({
-                "bookId": $("#bookId").val(),
-                "notes": $("#note").val()
-            }),
-            headers: {'x-jwt-token' : localStorage.getItem('token')},
-            success: function (data, textStatus, xhr) {
-                if(xhr.status === 200){
-                    localStorage.setItem('token',data.token);
-                    $("#message").addClass("alert alert-success").html(data.message).fadeIn(1000).fadeOut(3000);
-                    var table = $('#example').DataTable();
-                    table.ajax.reload();
+        if($('#note').val() !== book.notes){
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: apiUrl + "savenote",
+                data: JSON.stringify(book),
+                headers: {'x-jwt-token' : localStorage.getItem('token')},
+                success: function (data, textStatus, xhr) {
+                    if(xhr.status === 200){
+                        localStorage.setItem('token',data.token);
+                        $("#message").addClass("alert alert-success").html(data.message).fadeIn(1000).fadeOut(3000);
+                        ele.parent().parent().find('p').eq(0).html($("#note").val());
+                        /*var table = $('#example').DataTable();
+                          table.ajax.reload();*/
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#message").addClass("alert alert-warning").html(jqXHR.responseJSON.message).fadeIn(1000).fadeOut(3000);
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $("#message").addClass("alert alert-warning").html(jqXHR.responseJSON.message).fadeIn(1000).fadeOut(3000);
-            }
-
-        });
+            });
+        }
     }
 </script>
